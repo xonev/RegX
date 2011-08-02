@@ -28,14 +28,29 @@ $(document).ready(function () {
     });
 
     $('input').keypress(function (event) {
-        var $enteredText = $("#entered-text")
-        , testText = $("#test-text")[0];
+        var $enteredText
+        , testText
+        , $checkboxes
+        , modifiers = "";
+
+        
         if (event.which === 13) {
+            $enteredText = $("#entered-text")
+            
+            $checkboxes = $("input[type=checkbox]:checked");
+            $checkboxes.each(function (index) {
+                modifiers += this.value;
+            });
+
+            testText = $("#test-text")[0];
+            
             event.preventDefault();
             $enteredText.empty();
             $enteredText.append(this.value);
             socket.emit('find match', {
-                pattern: this.value, testText: testText.value
+                pattern: this.value,
+                testText: testText.value,
+                modifiers: modifiers
             });
         } 
     }); 
